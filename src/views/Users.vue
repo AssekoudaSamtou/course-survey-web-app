@@ -36,7 +36,7 @@
       </md-table>
     </div>
 
-    <div>
+    <div id="user-modal">
       <md-dialog :md-active.sync="showDialog">
         <md-dialog-title>{{ dialogTitle }}</md-dialog-title>
 
@@ -84,6 +84,7 @@
         <md-dialog-actions>
           <md-button class="md-primary" @click="showDialog = false">Close</md-button>
           <md-button v-show="showSaveBtn" class="md-primary" @click="newUser()">Save</md-button>
+          <md-button v-show="showDeleteBtn" class="md-primary" @click="deleteUser(user.id)">Delete</md-button>
         </md-dialog-actions>
       </md-dialog>
     </div>
@@ -107,17 +108,18 @@
     data: () => ({
       search: null,
       showDialog: false,
+      showDeleteBtn: false,
       showSaveBtn: true,
       dialogTitle: "Ajout d'utilisateur",
       searched: [],
       user: {
-        id : 0,
-        nom: "",
-        prenom: "",
-        email: "",
-        telephone: "",
-        genre: "",
-        titre: "",
+        id : null,
+        nom: null,
+        prenom: null,
+        email: null,
+        telephone: null,
+        genre: null,
+        titre: null,
       },
       users: [
         {
@@ -135,15 +137,24 @@
       newUser () {
         this.users.push(this.user);
         this.user =  {
-          id : 0,
-          nom: "",
-          prenom: "",
-          email: "",
-          telephone: "",
-          genre: "",
-          titre: "",
+          id : null,
+          nom: null,
+          prenom: null,
+          email: null,
+          telephone: null,
+          genre: null,
+          titre: null,
         };
         this.showDialog = false;
+
+      },
+      deleteUser (id) {
+        for (var index = 0; index < this.users.length; index++) {
+          console.log(this.users[index]);
+          if (this.users[index].id === id) {
+            this.users.splice(index, 1)
+          }
+        }
 
       },
       updateUser (item) {
@@ -151,6 +162,7 @@
         this.showDialog = true;
         this.user = item;
         this.showSaveBtn = false;
+        this.showDeleteBtn = true;
       },
       searchOnTable () {
         this.searched = searchByName(this.users, this.search)
@@ -165,5 +177,9 @@
 <style lang="scss" scoped>
   .md-field {
     max-width: 300px;
+  }
+
+  #user-modal {
+    padding: 50px;
   }
 </style>

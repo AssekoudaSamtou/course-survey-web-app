@@ -7,9 +7,7 @@
           <h3 class="md-title">CourseSurvey</h3>
         </div>
         <div class="md-toolbar-section-end">
-          <md-button
-            class="md-just-icon md-simple md-white md-toolbar-toggle"
-          >
+          <md-button class="md-just-icon md-simple md-white md-toolbar-toggle">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
