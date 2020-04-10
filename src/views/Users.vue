@@ -1,23 +1,13 @@
 <template>
   <div class="about">
-    <h1>This is an users page</h1>
-    <md-button
-      slot="buttons"
-      href="javascript:void(0)"
-      class="md-just-icon md-simple md-white">
-
-        <i class="fab fa-facebook-square"></i>
-
-    </md-button>
-
-    <md-icon>favorite</md-icon>
+    <h1>This is the users page</h1>
 
     <div>
       <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
         <md-table-toolbar>
           <div class="md-toolbar-section-start">
             <h1 class="md-title">Users</h1>
-            <md-button class="md-dense md-raised md-primary">Ajouter</md-button>
+            <md-button class="md-dense md-raised md-primary" @click="showDialog = true">Ajouter</md-button>
           </div>
 
           <md-field md-clearable class="md-toolbar-section-end">
@@ -31,49 +21,72 @@
           <md-button class="md-primary md-raised" @click="newUser">Create New User</md-button>
         </md-table-empty-state>
 
-        <md-table-row slot="md-table-row" slot-scope="{ item }">
+        <md-table-row slot="md-table-row" slot-scope="{ item }" @click="updateUser(item)">
           <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
-          <md-table-cell md-label="Name" md-sort-by="name">{{ item.name }}</md-table-cell>
+          <md-table-cell md-label="Nom" md-sort-by="nom">{{ item.nom }}</md-table-cell>
+          <md-table-cell md-label="Prénom" md-sort-by="prenom">{{ item.prenom }}</md-table-cell>
           <md-table-cell md-label="Email" md-sort-by="email">{{ item.email }}</md-table-cell>
-          <md-table-cell md-label="Gender" md-sort-by="gender">{{ item.gender }}</md-table-cell>
-          <md-table-cell md-label="Job Title" md-sort-by="title">{{ item.title }}</md-table-cell>
+          <md-table-cell md-label="Téléphone" md-sort-by="telephone">{{ item.telephone }}</md-table-cell>
+          <md-table-cell md-label="Genre" md-sort-by="genre">
+            <span v-if="item.genre === 'M'">Masculin</span>
+            <span v-else-if="item.genre === 'F'">Féminin</span>
+          </md-table-cell>
+          <md-table-cell md-label="Titre" md-sort-by="titre">{{ item.titre }}</md-table-cell>
         </md-table-row>
       </md-table>
     </div>
 
     <div>
-    <md-dialog :md-active.sync="showDialog">
-      <md-dialog-title>Preferences</md-dialog-title>
+      <md-dialog :md-active.sync="showDialog">
+        <md-dialog-title>{{ dialogTitle }}</md-dialog-title>
 
-      <md-tabs md-dynamic-height>
-        <md-tab md-label="General">
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
-        </md-tab>
+        <md-field>
+          <label>Nom</label>
+          <md-input v-model="user.nom" placeholder="Jonh"></md-input>
+        </md-field>
 
-        <md-tab md-label="Activity">
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
-        </md-tab>
+        <md-field>
+          <label>Prénom</label>
+          <md-input v-model="user.prenom" placeholder="Doe"></md-input>
+        </md-field>
 
-        <md-tab md-label="Account">
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
-        </md-tab>
-      </md-tabs>
+        <md-field>
+          <label for="type">Genre</label>
+              <md-select v-model="user.genre" name="genre" id="genre">
+                <md-option value="M">Masculin</md-option>
+                <md-option value="F">Féminin</md-option>
+              </md-select>
+        </md-field>
 
-      <md-dialog-actions>
-        <md-button class="md-primary" @click="showDialog = false">Close</md-button>
-        <md-button class="md-primary" @click="showDialog = false">Save</md-button>
-      </md-dialog-actions>
-    </md-dialog>
+        <md-field>
+          <label>Email</label>
+          <md-input v-model="user.email" placeholder="jonhdoe@example.com"></md-input>
+        </md-field>
 
-    <md-button class="md-primary md-raised" @click="showDialog = true">Show Dialog</md-button>
-  </div>
+        <md-field>
+          <label>Téléphone</label>
+          <md-input v-model="user.telephone" placeholder="+228 98 65 32 54"></md-input>
+        </md-field>
+
+        <div class="md-layout md-gutter">
+          <div class="md-layout-item">
+            <md-field>
+              <label for="type">Titre</label>
+              <md-select v-model="user.titre" name="titre" id="titre">
+                <md-option value="Enseignant">Enseignant</md-option>
+                <md-option value="Etudiant">Etudiant</md-option>
+                <md-option value="Admin">Administrateur</md-option>
+              </md-select>
+            </md-field>
+          </div>
+        </div>
+
+        <md-dialog-actions>
+          <md-button class="md-primary" @click="showDialog = false">Close</md-button>
+          <md-button v-show="showSaveBtn" class="md-primary" @click="newUser()">Save</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+    </div>
   </div>
 </template>
 <script>
@@ -94,76 +107,50 @@
     data: () => ({
       search: null,
       showDialog: false,
+      showSaveBtn: true,
+      dialogTitle: "Ajout d'utilisateur",
       searched: [],
+      user: {
+        id : 0,
+        nom: "",
+        prenom: "",
+        email: "",
+        telephone: "",
+        genre: "",
+        titre: "",
+      },
       users: [
         {
           id: 1,
-          name: "Shawna Dubbin",
+          nom: "Shawna ",
+          prenom: "Dubbin",
           email: "sdubbin0@geocities.com",
-          gender: "Male",
-          title: "Assistant Media Planner"
-        },
-        {
-          id: 2,
-          name: "Odette Demageard",
-          email: "odemageard1@spotify.com",
-          gender: "Female",
-          title: "Account Coordinator"
-        },
-        {
-          id: 3,
-          name: "Vera Taleworth",
-          email: "vtaleworth2@google.ca",
-          gender: "Male",
-          title: "Community Outreach Specialist"
-        },
-        {
-          id: 4,
-          name: "Lonnie Izkovitz",
-          email: "lizkovitz3@youtu.be",
-          gender: "Female",
-          title: "Operator"
-        },
-        {
-          id: 5,
-          name: "Thatcher Stave",
-          email: "tstave4@reference.com",
-          gender: "Male",
-          title: "Software Test Engineer III"
-        },
-        {
-          id: 6,
-          name: "Karim Chipping",
-          email: "kchipping5@scribd.com",
-          gender: "Female",
-          title: "Safety Technician II"
-        },
-        {
-          id: 7,
-          name: "Helge Holyard",
-          email: "hholyard6@howstuffworks.com",
-          gender: "Female",
-          title: "Internal Auditor"
-        },
-        {
-          id: 8,
-          name: "Rod Titterton",
-          email: "rtitterton7@nydailynews.com",
-          gender: "Male",
-          title: "Technical Writer"
-        },
-        {
-          id: 9,
-          name: "Gawen Applewhite",
-          email: "gapplewhite8@reverbnation.com",
-          gender: "Female",
-          title: "GIS Technical Architect"
-        },
+          telephone: "+228 87 54 21 69",
+          genre: "M",
+          titre: "Etudiant"
+        }
       ]
     }),
     methods: {
       newUser () {
-        window.alert('Noop')
+        this.users.push(this.user);
+        this.user =  {
+          id : 0,
+          nom: "",
+          prenom: "",
+          email: "",
+          telephone: "",
+          genre: "",
+          titre: "",
+        };
+        this.showDialog = false;
+
+      },
+      updateUser (item) {
+        this.dialogTitle = "Modification d'utilisateur";
+        this.showDialog = true;
+        this.user = item;
+        this.showSaveBtn = false;
       },
       searchOnTable () {
         this.searched = searchByName(this.users, this.search)
